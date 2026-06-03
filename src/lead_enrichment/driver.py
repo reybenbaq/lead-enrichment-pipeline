@@ -1,12 +1,12 @@
-"""Pipeline driver — orchestrates one full processing cycle.
+"""Pipeline driver - orchestrates one full processing cycle.
 
 The driver is the only module that touches the data store directly. It
 implements the two mechanisms that make the pipeline reliable at scale:
 
-1. Batch pickup with stage filter — fetches up to N unprocessed records
+1. Batch pickup with stage filter - fetches up to N unprocessed records
    per run and dispatches each through the full pipeline.
 
-2. Ghost-slots cooldown re-admit — runs at the start of every cycle to
+2. Ghost-slots cooldown re-admit - runs at the start of every cycle to
    prevent records from being permanently stuck. See ``_readmit_expired_cooldowns``
    for a full explanation of the failure mode and the fix.
 
@@ -59,13 +59,13 @@ def run_cycle(
 
     logger.info("picked up %d records for processing", len(batch))
 
-    # Step 3–4: process each record
+    # Step 3-4: process each record
     for record in batch:
         try:
             _process_record(record, config, sink, summary)
         except CreditExhaustedError:
             logger.error(
-                "credit exhausted — halting batch after %d records processed",
+                "credit exhausted - halting batch after %d records processed",
                 summary.processed,
             )
             summary.errored += 1
@@ -75,7 +75,7 @@ def run_cycle(
             summary.errored += 1
 
     logger.info(
-        "cycle complete — processed=%d advanced=%d review=%d errored=%d "
+        "cycle complete - processed=%d advanced=%d review=%d errored=%d "
         "skipped=%d readmitted=%d",
         summary.processed,
         summary.advanced,
@@ -103,11 +103,11 @@ def _readmit_expired_cooldowns(store: dict[str, LeadRecord]) -> int:
     The bug: when the cooldown expires, the stage is still "cooldown".
     The pickup filter ignores it because the stage is wrong.
     The cooldown sweep that was supposed to reset the stage to PICKUP_STAGE
-    only checked for records with the cooldown field *set* — but the filter
+    only checked for records with the cooldown field *set* - but the filter
     for pickup checked for records with no cooldown field. The two conditions
     never aligned, so the record was invisible to both sweeps.
 
-    These records filled slots in the store permanently — queue length grew,
+    These records filled slots in the store permanently - queue length grew,
     real throughput fell, and the logs showed a non-empty queue that never
     drained. We called these "ghost slots."
 
@@ -118,7 +118,7 @@ def _readmit_expired_cooldowns(store: dict[str, LeadRecord]) -> int:
     them normally.
 
     This sweep is cheap (one pass over the in-memory store) and runs
-    unconditionally — it is the canonical place where cooldown expiry is
+    unconditionally - it is the canonical place where cooldown expiry is
     applied, so the pickup filter stays simple.
     """
     now = datetime.now(tz=timezone.utc)
@@ -131,7 +131,7 @@ def _readmit_expired_cooldowns(store: dict[str, LeadRecord]) -> int:
             cooldown_end = datetime.fromisoformat(record.cooldown_until)
         except ValueError:
             logger.warning(
-                "record %s has malformed cooldown_until value %r — clearing",
+                "record %s has malformed cooldown_until value %r - clearing",
                 record.record_id,
                 record.cooldown_until,
             )
@@ -142,7 +142,7 @@ def _readmit_expired_cooldowns(store: dict[str, LeadRecord]) -> int:
 
         if now >= cooldown_end:
             logger.debug(
-                "record %s cooldown expired — re-admitting to pickup pool",
+                "record %s cooldown expired - re-admitting to pickup pool",
                 record.record_id,
             )
             record.cooldown_until = ""
@@ -203,7 +203,7 @@ def _process_record(
         ]
 
     if not record.contacts:
-        logger.debug("record %s: no contacts found — skipping", record.record_id)
+        logger.debug("record %s: no contacts found - skipping", record.record_id)
         summary.skipped += 1
         return
 
@@ -232,7 +232,7 @@ def _process_record(
         summary.review += 1
 
     logger.info(
-        "record %s processed — score=%.2f stage=%s",
+        "record %s processed - score=%.2f stage=%s",
         record.record_id,
         record.score,
         record.final_stage,

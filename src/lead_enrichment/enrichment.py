@@ -1,4 +1,4 @@
-"""AI enrichment stage — stage 3 of the pipeline.
+"""AI enrichment stage - stage 3 of the pipeline.
 
 One LLM call per record generates a short personalisation note that the
 outreach team uses to tailor first contact. The call is gated behind
@@ -17,14 +17,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 # System prompt for the LLM enrichment call.
-# This is a generic prompt written for the sample — it does not reproduce
+# This is a generic prompt written for the sample - it does not reproduce
 # any proprietary prompt text from any production system.
 _SYSTEM_PROMPT = (
     "You are a research assistant helping a business development team. "
     "Given a property owner's name, address, and property type, write one short sentence "
     "(under 30 words) that could personalise an outreach message. "
     "Focus on the property location or type. Do not make up facts. "
-    "Output only the sentence — no preamble."
+    "Output only the sentence - no preamble."
 )
 
 
@@ -41,7 +41,7 @@ def enrich(
     Uses the OpenAI API when ``api_key`` is non-empty; falls back to a
     deterministic mock otherwise so the demo runs without credentials.
 
-    Returns an empty string on any exception — the pipeline continues.
+    Returns an empty string on any exception - the pipeline continues.
     """
     if not api_key:
         return _mock_note(owner_first, owner_last, address, classification)
@@ -61,7 +61,7 @@ def _call_openai(
     Returns the model's reply as plain text, or empty string on failure.
     """
     try:
-        import openai  # deferred import — only needed when key is present
+        import openai  # deferred import - only needed when key is present
 
         client = openai.OpenAI(api_key=api_key)
         user_message = (
@@ -80,7 +80,7 @@ def _call_openai(
         )
         return response.choices[0].message.content or ""
     except Exception as exc:  # noqa: BLE001
-        logger.warning("AI enrichment failed: %s — continuing without note", exc)
+        logger.warning("AI enrichment failed: %s - continuing without note", exc)
         return ""
 
 
@@ -96,10 +96,10 @@ def _mock_note(
     without any randomness or external calls.
     """
     key = f"{owner_first}|{owner_last}|{address}|{classification}"
-    digest = int(hashlib.md5(key.encode()).hexdigest(), 16)  # noqa: S324 — non-crypto use
+    digest = int(hashlib.md5(key.encode()).hexdigest(), 16)  # noqa: S324 - non-crypto use
     templates = [
         f"Your {classification} property at {address} caught our attention.",
-        f"We noticed your {classification} listing at {address} — great location.",
+        f"We noticed your {classification} listing at {address} - great location.",
         f"{owner_first}, we work with {classification} owners in that area.",
         f"The {classification} property on {address} matches what our clients look for.",
         f"We focus on {classification} owners like yourself in that market.",

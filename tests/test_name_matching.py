@@ -25,7 +25,7 @@ class TestNameMatches:
         assert _name_matches(contact, "Sarah", "Mitchell") is True
 
     def test_initial_match(self) -> None:
-        """Provider returns first initial only — should still match."""
+        """Provider returns first initial only - should still match."""
         contact = _make_contact("S", "Mitchell")
         assert _name_matches(contact, "Sarah", "Mitchell") is True
 
@@ -42,7 +42,7 @@ class TestNameMatches:
         assert _name_matches(contact, "Sarah", "Mitchell") is False
 
     def test_empty_expected_name_accepts_all(self) -> None:
-        """When we have no expected name, we cannot filter — accept everything."""
+        """When we have no expected name, we cannot filter - accept everything."""
         contact = _make_contact("Anyone", "Whatever")
         assert _name_matches(contact, "", "") is True
 

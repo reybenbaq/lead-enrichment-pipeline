@@ -17,7 +17,7 @@ class ProviderError(EnrichmentError):
 class CreditExhaustedError(ProviderError):
     """Raised when the provider returns a credit-exhausted signal (HTTP 402 or equivalent).
 
-    This is a terminal condition for the current run — no retry should be attempted.
+    This is a terminal condition for the current run - no retry should be attempted.
     The driver logs the error and halts the batch so credits are not wasted on
     retries that will all fail.
     """

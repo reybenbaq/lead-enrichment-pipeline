@@ -1,4 +1,4 @@
-"""lead-enrichment-pipeline — public API re-exports."""
+"""lead-enrichment-pipeline - public API re-exports."""
 from __future__ import annotations
 
 from .models import ContactRecord, LeadRecord, RunSummary

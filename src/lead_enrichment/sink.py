@@ -1,4 +1,4 @@
-"""Data sink — stage 5 of the pipeline.
+"""Data sink - stage 5 of the pipeline.
 
 Writes scored lead records to a local JSON file that stands in for a CRM.
 Each record is stored as an entry in a top-level dict keyed by ``record_id``.

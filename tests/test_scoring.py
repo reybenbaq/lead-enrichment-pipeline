@@ -113,7 +113,7 @@ class TestCorroborationBonus:
 
     def test_no_bonus_when_same_source_repeated(self, contact_mobile: ContactRecord) -> None:
         duplicate = ContactRecord(
-            source=contact_mobile.source,  # same source — does not count
+            source=contact_mobile.source,  # same source - does not count
             first_name="Sarah", last_name="Mitchell",
             phone=contact_mobile.phone, phone_type="mobile",
             email=contact_mobile.email, on_dnc=False, confidence=0.9,

@@ -1,4 +1,4 @@
-"""Skip-trace provider waterfall — stage 2 of the pipeline.
+"""Skip-trace provider waterfall - stage 2 of the pipeline.
 
 Three mock providers stand in for real skip-trace vendors. They return
 synthetic ``ContactRecord`` objects; no real vendor names appear here.
@@ -12,7 +12,7 @@ matches the owner name we searched for, using a lightweight phonetic/initial
 heuristic to handle nicknames and middle-name variations.
 
 Retry logic uses exponential backoff on transient errors. A 402-equivalent
-``CreditExhaustedError`` is terminal — the driver catches it and halts the
+``CreditExhaustedError`` is terminal - the driver catches it and halts the
 batch.
 """
 from __future__ import annotations
@@ -49,7 +49,7 @@ class SkipTraceProvider(Protocol):
 
 
 # ---------------------------------------------------------------------------
-# Mock providers — deterministic synthetic data
+# Mock providers - deterministic synthetic data
 #
 # Real skip-trace vendors have imperfect, uncorrelated hit rates: one finds a
 # mobile, another only a landline, a third nothing at all. These mocks
@@ -62,11 +62,11 @@ class SkipTraceProvider(Protocol):
 def _bucket(first: str, last: str, address: str) -> int:
     """Deterministic 0-9 bucket from the lead identity (stable across runs)."""
     raw = f"{first.lower()}|{last.lower()}|{address.lower()}"
-    return int(hashlib.md5(raw.encode()).hexdigest(), 16) % 10  # noqa: S324 — non-crypto use
+    return int(hashlib.md5(raw.encode()).hexdigest(), 16) % 10  # noqa: S324 - non-crypto use
 
 
 class _MockProviderA:
-    """Provider A mock — best coverage. Returns a mobile + email for most leads.
+    """Provider A mock - best coverage. Returns a mobile + email for most leads.
 
     Misses entirely for the top buckets (forcing fallback to provider B), and
     returns a phone-only result for a couple of buckets so the auto-advance
@@ -80,7 +80,7 @@ class _MockProviderA:
             return []
         b = _bucket(first, last, address)
         if b >= 8:
-            return []  # no record found — the waterfall falls through to provider B
+            return []  # no record found - the waterfall falls through to provider B
         has_email = b not in (6, 7)
         email = f"{first.lower()}.{last.lower()}@example-mail.com" if has_email else ""
         return [
@@ -98,7 +98,7 @@ class _MockProviderA:
 
 
 class _MockProviderB:
-    """Provider B mock — fallback. Landline only, no email, lower confidence."""
+    """Provider B mock - fallback. Landline only, no email, lower confidence."""
 
     name = "provider_b"
 
@@ -106,7 +106,7 @@ class _MockProviderB:
         if not first or not last:
             return []
         if _bucket(first, last, address) == 9:
-            return []  # also misses — last-resort provider C is tried next
+            return []  # also misses - last-resort provider C is tried next
         return [
             ContactRecord(
                 source=self.name,
@@ -122,7 +122,7 @@ class _MockProviderB:
 
 
 class _MockProviderC:
-    """Provider C mock — last resort. Low-confidence VoIP number, no email."""
+    """Provider C mock - last resort. Low-confidence VoIP number, no email."""
 
     name = "provider_c"
 
@@ -160,7 +160,7 @@ def run_waterfall(record: LeadRecord) -> None:
 
     Populates ``record.contacts`` with deduplicated candidates. Each provider
     result is validated against the expected owner name before acceptance.
-    CreditExhaustedError propagates immediately — do not catch it here.
+    CreditExhaustedError propagates immediately - do not catch it here.
     """
     seen_phones: set[str] = set()
 
@@ -205,11 +205,11 @@ def _lookup_with_retry(
         try:
             return provider.lookup(first, last, address)
         except CreditExhaustedError:
-            raise  # terminal — propagate immediately
+            raise  # terminal - propagate immediately
         except ProviderError as exc:
             wait = _BACKOFF_BASE * (2 ** attempt)
             logger.warning(
-                "provider %s transient error (attempt %d/%d): %s — retrying in %.1fs",
+                "provider %s transient error (attempt %d/%d): %s - retrying in %.1fs",
                 provider.name,
                 attempt + 1,
                 _MAX_RETRIES,
@@ -219,7 +219,7 @@ def _lookup_with_retry(
             time.sleep(wait)
 
     logger.error(
-        "provider %s failed after %d attempts — skipping", provider.name, _MAX_RETRIES
+        "provider %s failed after %d attempts - skipping", provider.name, _MAX_RETRIES
     )
     return []
 
@@ -247,8 +247,8 @@ def _name_matches(contact: ContactRecord, expected_first: str, expected_last: st
 
     Checks are applied in order:
     1. Exact match (case-insensitive).
-    2. Initial match — contact first is the initial of the expected first.
-    3. Nickname match — contact first is a known nickname of the expected first.
+    2. Initial match - contact first is the initial of the expected first.
+    3. Nickname match - contact first is a known nickname of the expected first.
 
     Last name must always match exactly (case-insensitive).
     """

@@ -1,4 +1,4 @@
-"""Demo entry point — runs synthetic lead records through the full pipeline.
+"""Demo entry point - runs synthetic lead records through the full pipeline.
 
 Usage (no API key required):
     SINK_PATH=./demo_sink.json python main.py
@@ -39,7 +39,7 @@ def _build_demo_store() -> dict[str, LeadRecord]:
     demonstrate the ghost-slots re-admit sweep.
     """
     now = datetime.now(tz=timezone.utc)
-    expired = (now - timedelta(hours=2)).isoformat()  # 2 hours ago — definitely expired
+    expired = (now - timedelta(hours=2)).isoformat()  # 2 hours ago - definitely expired
 
     raw_leads = [
         {"id": "L001", "owner_first_name": "Sarah", "owner_last_name": "Mitchell",
@@ -48,13 +48,13 @@ def _build_demo_store() -> dict[str, LeadRecord]:
          "property_address": "88 Oak Avenue, Riverside", "property_type": "single_family"},
         {"id": "L003", "owner_first_name": "Patricia", "owner_last_name": "Nguyen",
          "property_address": "200 Pine Road, Lakewood", "property_type": "condo"},
-        # Hard lead — provider A and B both miss; the waterfall falls all the
+        # Hard lead - provider A and B both miss; the waterfall falls all the
         # way through to provider C (low-confidence VoIP, no email -> parked).
         {"id": "L004", "owner_first_name": "Henry", "owner_last_name": "Vasquez",
          "property_address": "250 Dogwood Drive, Clearwater", "property_type": "single_family"},
         {"id": "L005", "owner_first_name": "Margaret", "owner_last_name": "Davies",
          "property_address": "77 Cedar Drive, Westview", "property_type": "residential"},
-        # Fast-path record — contact info already present
+        # Fast-path record - contact info already present
         {"id": "L006", "owner_first_name": "Thomas", "owner_last_name": "Erikson",
          "property_address": "19 Elm Court, Northgate", "property_type": "single_family",
          "contact_email": "thomas.erikson@example.com", "contact_phone": "555-9999"},
@@ -65,7 +65,7 @@ def _build_demo_store() -> dict[str, LeadRecord]:
          "property_address": "301 Willow Way, Eastdale", "property_type": "residential"},
         {"id": "L008", "owner_first_name": "Michael", "owner_last_name": "Santos",
          "property_address": "14 Aspen Circle, Southpark", "property_type": "condo"},
-        # Messy permit row — owner name never parsed off the source record. No
+        # Messy permit row - owner name never parsed off the source record. No
         # provider can match an empty name, so this lead is skipped (no contacts).
         {"id": "L009", "owner_first_name": "", "owner_last_name": "",
          "property_address": "parcel listed to a holding entity", "property_type": "residential"},

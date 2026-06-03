@@ -1,11 +1,11 @@
-"""Multi-signal scoring — stage 4 of the pipeline.
+"""Multi-signal scoring - stage 4 of the pipeline.
 
 Scores each contact candidate against a set of illustrative signals, selects
 the primary contact, and optionally adds a corroboration bonus when multiple
 sources agree on the same contact details.
 
 NOTE: The weights below are illustrative placeholders. They demonstrate the
-scoring architecture — the real relative weights of any production system are
+scoring architecture - the real relative weights of any production system are
 not represented here.
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
-# Signal weights — ILLUSTRATIVE ONLY, not from any real system
+# Signal weights - ILLUSTRATIVE ONLY, not from any real system
 # ---------------------------------------------------------------------------
 
 # Each weight is a float contribution to a score that is clamped to [0.0, 1.0]
@@ -54,7 +54,7 @@ def score_record(record: LeadRecord) -> None:
     """Score all contact candidates, select the primary contact, and update ``record``.
 
     Corroboration bonus is applied when more than one provider returned a
-    contact and their email or phone overlaps — multiple independent sources
+    contact and their email or phone overlaps - multiple independent sources
     agreeing on a detail increases confidence.
 
     Populates ``record.score`` and ``record.primary_contact``.

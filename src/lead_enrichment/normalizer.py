@@ -1,4 +1,4 @@
-"""Input normalisation — stage 1 of the pipeline.
+"""Input normalisation - stage 1 of the pipeline.
 
 Extracts structured fields from the raw lead record. When a contact phone or
 email is already present on the record the normalisation stage sets a fast-path

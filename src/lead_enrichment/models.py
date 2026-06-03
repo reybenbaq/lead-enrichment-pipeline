@@ -38,14 +38,14 @@ class ContactRecord:
     phone_type: str  # "mobile", "landline", "voip", "unknown"
     email: str
     on_dnc: bool  # Do Not Contact registry flag
-    confidence: float  # raw provider confidence, 0.0–1.0
+    confidence: float  # raw provider confidence, 0.0-1.0
 
 
 @dataclass
 class LeadRecord:
     """A mutable record representing one lead as it moves through the pipeline.
 
-    Fields are populated incrementally — the record starts with only the raw
+    Fields are populated incrementally - the record starts with only the raw
     input fields and accumulates enrichment data stage by stage.
     """
 
@@ -75,7 +75,7 @@ class LeadRecord:
     final_stage: str = ""
     pipeline_note: str = ""
 
-    # Cooldown support — an ISO-format timestamp string, or empty string
+    # Cooldown support - an ISO-format timestamp string, or empty string
     # Records parked under an unexpired cooldown are invisible to the pickup
     # filter (see _readmit_expired_cooldowns in driver.py for the ghost-slots
     # fix and a full explanation of the failure mode).

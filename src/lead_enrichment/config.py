@@ -4,7 +4,7 @@ All ``os.environ`` reads live in this module. ``load_config`` collects every
 missing required variable before raising, so the operator sees the full list
 of problems on first run rather than fixing them one at a time.
 
-``OPENAI_API_KEY`` is optional — if absent the AI enrichment stage runs a
+``OPENAI_API_KEY`` is optional - if absent the AI enrichment stage runs a
 deterministic mock so the demo executes with zero external credentials.
 """
 from __future__ import annotations
