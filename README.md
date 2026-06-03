@@ -1,6 +1,6 @@
 # lead-enrichment-pipeline
 
-> A from-scratch reconstruction of a production lead-enrichment pipeline pattern. Raw lead records go in. Scored, contact-enriched records come out. The vendor surface, data, weights, and prompts are all synthetic. This repo reconstructs the engineering pattern, not any real system's data or logic.
+> A lead-enrichment pipeline I built and run in production, sanitized for public release. Raw lead records go in. Scored, contact-enriched records come out. The architecture and the reliability fixes are real. The vendor names, data, scoring weights, and prompts are all synthetic, so nothing proprietary ships with the repo.
 
 ## What this is
 
